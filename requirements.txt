@@ -1,0 +1,7 @@
+ipykernel
+pandas
+streamlit
+nbformat
+nbconvert
+selenium
+webdriver-manager
