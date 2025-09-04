@@ -370,7 +370,7 @@ else:
                         outcome_mask = df['Outcome']==outcome
                         zero_points_mask = df.loc[outcome_mask, cols].fillna(0).sum(axis=1)==0
                         for event in df.loc[outcome_mask,:].loc[zero_points_mask,'Event_Number'].unique():
-                            qc_messages.append(f"❌ {team_name}: Raid {event} — Outcome='{outcome}', no points given. Check data.")
+                            qc_messages.append(f"❌ {team_name}: {event} — Outcome = '{outcome}', no points given. Check data.")
                         if zero_points_mask.sum()==0:
                             qc_messages.append(f"✅ QC 6: All {team_name} ({outcome}) rows correct.")
 
@@ -509,4 +509,5 @@ else:
         st.dataframe(st.session_state.processed_df.head(5), use_container_width=True)
     else:
         if not uploaded_file:
+
             st.info("Upload a CSV file to start processing.")
