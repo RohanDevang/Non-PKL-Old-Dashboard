@@ -516,7 +516,7 @@ else:
         st.download_button(
             "📥 Download Processed CSV",
             data=csv_buffer.getvalue().encode('utf-8'),
-            file_name="processed_kabaddi_data.csv",
+            file_name="final_processed.csv",
             mime="text/csv"
         )
 
@@ -530,4 +530,5 @@ else:
         if not uploaded_file:
 
             st.info("Upload a CSV file to start processing.")
+
 
