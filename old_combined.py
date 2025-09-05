@@ -476,6 +476,25 @@ else:
                         qc_messages.append(f"❌ {event}: Issue with 'Attacking_Skill' & 'Defensive/Counter_Action_Skill'.")
                     if combined_issues.empty:
                         qc_messages.append("✅ QC 11 & QC 12: All rows correct.")
+
+                    # QC 13 Rule: When Outcome == 'Unsuccessful', Defensive_Skill must NOT be empty
+                    qc_violations = df[
+                        (df['Outcome'] == 'Unsuccessful') &
+                        (df['Defensive_Skill'].isna() | df['Defensive_Skill'].fillna('').str.strip().eq(''))
+                    ]
+                    
+                    # Show the violations
+                    if not qc_violations.empty:
+                        for idx, row in qc_violations.iterrows():
+                            qc_messages.append(
+                                f"❌ {row['Event_Number']}: Outcome is 'Unsuccessful' and 'Defensive_Skill' is empty."
+                            )
+                        # Optional: save to CSV
+                        qc_violations.to_csv("qc_violations.csv", index=False)
+                    else:
+                        qc_messages.append("✅ QC 13: All rows are correct.")
+
+                        
                     st.session_state.processed_df = df  # processed dataframe
                     st.session_state.qc_results = qc_messages  # QC messages
                     st.success("Processing and QC complete!")
@@ -511,3 +530,4 @@ else:
         if not uploaded_file:
 
             st.info("Upload a CSV file to start processing.")
+
