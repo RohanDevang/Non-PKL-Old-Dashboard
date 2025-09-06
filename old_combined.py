@@ -527,6 +527,57 @@ def process_and_qc(df_in):
             else:
                 print("\n✅ Qc 13: All rows are correct")
 
+            # QC 14: Checking Raid_numbers
+            def kabaddi_raid_number_qc_grouped(df):
+                """
+                QC to validate Raid_Number using Match_Raid_Number for sorting.
+                Prints custom messages for mismatches or a success message if no errors.
+            
+                Required columns:
+                ['Match_Raid_No', 'Event_Number', 'Outcome', 'Raiding_Team_Name', 'Raid_Number']
+                """
+                # Sort by Match_Raid_No to ensure chronological order
+                df = df.sort_values(by='Match_Raid_No').reset_index(drop=True)
+            
+                grouped = df.groupby('Raiding_Team_Name')
+                error_found = False  # Flag to check if any errors occur
+            
+                for team, team_df in grouped:
+                    empty_count = 0  # Track consecutive empty raids for this team
+            
+                    for _, row in team_df.iterrows():
+                        outcome = row['Outcome']
+                        raid_num = row['Raid_Number']
+                        event_number = row['Event_Number']
+            
+                        # ---- Determine expected Raid_Number ----
+                        if empty_count == 0:
+                            expected = 1
+                        elif empty_count == 1:
+                            expected = 2
+                        else:
+                            expected = 3  # Do-or-Die
+            
+                        # ---- Check for errors ----
+                        if raid_num != expected:
+                            print(
+                                f"❌ {event_number}: Outcome is '{outcome}' and 'Raid_Number' is {raid_num}. "
+                                f"Expected 'Raid_Number': {expected}. Please check and update."
+                            )
+                            error_found = True
+            
+                        # ---- Update empty_count ----
+                        if outcome == "Empty":
+                            empty_count += 1
+                        else:
+                            empty_count = 0  # Reset on Successful or Unsuccessful
+            
+                # Final message if no errors found
+                if not error_found:
+                    print("\n✅ QC 14: All rows are correct")
+
+            kabaddi_raid_number_qc_grouped(df)
+
 
         content = buf.getvalue()
         qc_messages = content.splitlines()
@@ -703,6 +754,7 @@ else:
             use_container_width=True
         ):
             reset_state()
+
 
 
 
