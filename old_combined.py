@@ -627,7 +627,7 @@ mode = st.radio(
 # Cleaning Tool Mode
 # ---------------------------
 if mode == "Cleaning Tool":
-    st.title("Kabaddi Data Cleaning Tool")
+    st.title("Kabaddi Data Cleaning Tool - Old Dashboard")
     uploaded_file = st.file_uploader("Upload CSV", type="csv")
 
     if uploaded_file:
@@ -674,7 +674,7 @@ if mode == "Cleaning Tool":
 # Processing & QC Tool Mode
 # ---------------------------
 else:
-    st.title("Kabaddi Data Processing & QC Tool")
+    st.title("Kabaddi Data Processing & QC Tool - Old Dashboard")
     uploaded_file = st.file_uploader("Upload CSV", type="csv", on_change=reset_state)
 
     if uploaded_file:
@@ -754,6 +754,7 @@ else:
             use_container_width=True
         ):
             reset_state()
+
 
 
 
