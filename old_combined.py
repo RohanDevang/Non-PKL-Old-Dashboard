@@ -390,7 +390,7 @@ def process_and_qc(df_in):
 
             # QC 5: Attacking & Defensive Points match
             def check_points(cols, total_col, label):
-                print(f"\nChecking {label} → '{total_col}'")
+                print(f"\nChecking {label} → '{total_col}'\n")
                 # Some cols may not exist, treat missing as zeros
                 cols_present = [c for c in cols if c in df.columns]
                 mismatch = df[cols_present].sum(axis=1) != df[total_col]
@@ -754,6 +754,7 @@ else:
             use_container_width=True
         ):
             reset_state()
+
 
 
 
