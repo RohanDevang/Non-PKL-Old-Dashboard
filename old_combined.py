@@ -707,7 +707,7 @@ else:
 
         st.markdown(
             f"""
-            <div style="height:300px; overflow-y:scroll; border:2px solid yellow;
+            <div style="height:400px; overflow-y:scroll; border:2px solid yellow;
                     border-radius:8px; padding:10px;">
                 <pre>{qc_text}</pre>
             </div>
@@ -754,6 +754,7 @@ else:
             use_container_width=True
         ):
             reset_state()
+
 
 
 
