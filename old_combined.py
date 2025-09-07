@@ -11,7 +11,7 @@ st.set_page_config(layout="wide", page_title="Kabaddi QC Tool")
 
 # st.title("Kabaddi Data Processing & QC Tool - Old Dashboard")
 st.markdown(
-    '<h1>Kabaddi Data Processing & QC tool<span style="color:yellow;">Old Dashboard</span></h1>',
+    '<h1>Kabaddi Data Processing & QC tool - <span style="color:yellow;">Old Dashboard</span></h1>',
     unsafe_allow_html=True
 )
 
@@ -627,5 +627,6 @@ if uploaded_file:
         except Exception as e:
             sys.stdout = sys.__stdout__
             st.error(f"❌ An error occurred: {e}")
+
 
 
