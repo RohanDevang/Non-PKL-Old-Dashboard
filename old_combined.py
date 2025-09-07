@@ -390,7 +390,7 @@ def process_and_qc(df_in):
 
             # QC 5: Attacking & Defensive Points match
             def check_points(cols, total_col, label):
-                print(f"Checking {label} → '{total_col}'\n")
+                # print(f"Checking {label} → '{total_col}'\n")
                 # Some cols may not exist, treat missing as zeros
                 cols_present = [c for c in cols if c in df.columns]
                 mismatch = df[cols_present].sum(axis=1) != df[total_col]
@@ -674,7 +674,7 @@ if mode == "Cleaning Tool":
 # Processing & QC Tool Mode
 # ---------------------------
 else:
-    st.title("Kabaddi Data Processing & QC Tool - Old Dashboard")
+    st.title("Kabaddi Data QC Tool - Old Dashboard")
     uploaded_file = st.file_uploader("Upload CSV", type="csv", on_change=reset_state)
 
     if uploaded_file:
@@ -707,7 +707,7 @@ else:
 
         st.markdown(
             f"""
-            <div style="height:300px; overflow-y:scroll; border:1px solid grey;
+            <div style="height:300px; overflow-y:scroll; border:2px solid yellow;
                     border-radius:8px; padding:10px;">
                 <pre>{qc_text}</pre>
             </div>
@@ -754,6 +754,7 @@ else:
             use_container_width=True
         ):
             reset_state()
+
 
 
 
