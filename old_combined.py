@@ -338,9 +338,9 @@ def process_and_qc(df_in):
             if not invalid_rows.empty:
                 for idx, row in invalid_rows.iterrows():
                     empty_cols = mask.loc[idx][mask.loc[idx]].index.tolist()
-                    print(f"❌ Event {row['Event_Number']}: Empty in columns → {', '.join(empty_cols)}. Please check and update.")
+                    print(f"❌ Event {row['Event_Number']}: Empty in columns → {', '.join(empty_cols)}. Please check and update.\n")
             else:
-                print("✅ QC 1: All rows are completely filled. Thank you!")
+                print("✅ QC 1: All rows are completely filled. Thank you!\n")
 
             # QC 2: Outcome Empty consistency
             cols_qc1 = [
@@ -361,9 +361,9 @@ def process_and_qc(df_in):
             if mask_qc1_invalid.any():
                 for idx, row in df[mask_qc1_invalid].iterrows():
                     non_empty_cols = row[cols_present].replace('', pd.NA).dropna().index.tolist()
-                    print(f"❌ {row['Event_Number']}: → When Outcome is 'Empty', these columns should be empty: {', '.join(non_empty_cols)}.")
+                    print(f"❌ {row['Event_Number']}: → When Outcome is 'Empty', these columns should be empty: {', '.join(non_empty_cols)}.\n")
             else:
-                print("\n✅ QC 2: All rows meet QC 1 conditions for Outcome = 'Empty'.")
+                print("✅ QC 2: All rows meet QC 1 conditions for Outcome = 'Empty'.\n")
 
             # QC 3: Successful / Unsuccessful with Bonus = No & Raider_Self_Out = 0
             cols_qc2 = ['Defender_1', 'Number_of_Defenders', 'Zone_of_Action']
@@ -376,17 +376,17 @@ def process_and_qc(df_in):
                 for idx, row in df[mask_qc2_invalid].iterrows():
                     empty_cols = row[cols_qc2].replace('', pd.NA).isna()
                     missing_cols = empty_cols[empty_cols].index.tolist()
-                    print(f"❌ {row['Event_Number']}: When Outcome='{row['Outcome']}', Bonus='No', Raider_Self_Out=0 → Missing: {', '.join(missing_cols)}.")
+                    print(f"❌ {row['Event_Number']}: When Outcome='{row['Outcome']}', Bonus='No', Raider_Self_Out=0 → Missing: {', '.join(missing_cols)}.\n")
             else:
-                print("\n✅ QC 3: All rows are Valid")
+                print("✅ QC 3: All rows are Valid\n")
 
             # QC 4: Raid_Number = 3 must not have Outcome 'Empty'
             mask_invalid = (df['Raid_Number'] == 3) & (df['Outcome'] == 'Empty')
             if mask_invalid.any():
                 for idx, row in df[mask_invalid].iterrows():
-                    print(f"❌ {row['Event_Number']}: → Outcome is 'Empty' but Raid_No = 3. Please check and update.")
+                    print(f"❌ {row['Event_Number']}: → Outcome is 'Empty' but Raid_No = 3. Please check and update.\n")
             else:
-                print("\n✅ QC 4: All Raid_Number = 3 rows have valid Outcomes.")
+                print("✅ QC 4: All Raid_Number = 3 rows have valid Outcomes.\n")
 
             # QC 5: Attacking & Defensive Points match
             def check_points(cols, total_col, label):
@@ -397,9 +397,9 @@ def process_and_qc(df_in):
                 if mismatch.any():
                     for idx, row in df[mismatch].iterrows():
                         expected = df.loc[idx, cols_present].sum() if cols_present else 0
-                        print(f"❌ {row['Event_Number']}: → {label} mismatch (Expected: {expected}, Found: {row[total_col]})")
+                        print(f"❌ {row['Event_Number']}: → {label} mismatch (Expected: {expected}, Found: {row[total_col]})\n")
                 else:
-                    print(f"\n✅ QC 5: All rows are correct for {label}")
+                    print(f"✅ QC 5: All rows are correct for {label}\n")
 
             check_points(
                 ['Raiding_Touch_Points','Raiding_Bonus_Points','Raiding_Self_Out_Points','Raiding_All_Out_Points'],
@@ -419,9 +419,9 @@ def process_and_qc(df_in):
                 problem_mask = outcome_mask & zero_points
                 if problem_mask.any():
                     for raid_no in df_local.loc[problem_mask, 'Event_Number'].astype(str):
-                        print(f"❌ {team_name}: Raid {raid_no} — Outcome is '{outcome}', but no points were given.")
+                        print(f"❌ {team_name}: Raid {raid_no} — Outcome is '{outcome}', but no points were given.\n")
                 else:
-                    print(f"\n✅ QC 6: All {team_name} ({outcome}) rows are correct.")
+                    print(f"✅ QC 6: All {team_name} ({outcome}) rows are correct.\n")
 
             check_points_nonzero(
                 df, 'Successful',
@@ -436,9 +436,9 @@ def process_and_qc(df_in):
             mismatch_df = df[df['Defending_Self_Out_Points'] > 1]
             if not mismatch_df.empty:
                 for event_num in mismatch_df['Event_Number']:
-                    print(f"❌ {event_num}: 'Defending_Self_Out_Points' is greater than 1. Check 'Raider self out' column.")
+                    print(f"❌ {event_num}: 'Defending_Self_Out_Points' is greater than 1. Check 'Raider self out' column.\n")
             else:
-                print('\n✅ QC 7: All rows have correct Defending_Self_Out_Points values.')
+                print('✅ QC 7: All rows have correct Defending_Self_Out_Points values.\n')
 
             # QC 8: Successful Outcome must reset Raid_Number
             success_rows = df.index[df['Outcome'] == 'Successful']
@@ -451,9 +451,9 @@ def process_and_qc(df_in):
                         mismatches.append((success_event, df.loc[check_idx, 'Event_Number']))
             if mismatches:
                 for s, c in mismatches:
-                    print(f"❌ Outcome: 'Successful' {s}, --> {c} should have Raid_Number = 1.")
+                    print(f"❌ Outcome: 'Successful' {s}, --> {c} should have Raid_Number = 1.\n")
             else:
-                print("\n✅ QC 8: All rows are correct.")
+                print("✅ QC 8: All rows are correct.\n")
 
             # QC 9: Empty Raid Consistency
             errors_found = False
@@ -462,10 +462,10 @@ def process_and_qc(df_in):
                     if idx >= 2:
                         prev_row = df.loc[idx - 2]
                         if prev_row['Raid_Number'] == 1 and prev_row['Outcome'] != 'Empty':
-                            print(f"❌ {row['Event_Number']}: Previous raid not Empty")
+                            print(f"❌ {row['Event_Number']}: Previous raid not Empty\n")
                             errors_found = True
             if not errors_found:
-                print("\n✅ QC 9: All rows are correct.")
+                print("✅ QC 9: All rows are correct.\n")
 
             # QC 10: Raid_Length should be > 2
             errors_found = False
@@ -475,10 +475,10 @@ def process_and_qc(df_in):
                 except Exception:
                     rl_val = 0
                 if rl_val <= 2:
-                    print(f"⚠️ {row['Event_Number']}: Raid_Length is {row['Raid_Length']}")
+                    print(f"⚠️ {row['Event_Number']}: Raid_Length is {row['Raid_Length']}\n")
                     errors_found = True
             if not errors_found:
-                print("\n✅ QC 10: All rows have valid Raid_Length values.")
+                print("✅ QC 10: All rows have valid Raid_Length values.\n")
 
             # QC 11: Successful, No Bonus -> Defensive & Counter Action Skill consistency
             filtered_df = df[
@@ -493,9 +493,9 @@ def process_and_qc(df_in):
             ]
             if not mismatched_events.empty:
                 for event_num in mismatched_events:
-                    print(f"\n❌ {event_num}: -'Defensive_Skill' or 'Counter_Action_Skill' missing.")
+                    print(f"❌ {event_num}: -'Defensive_Skill' or 'Counter_Action_Skill' missing.\n")
             else:
-                print("\n✅ QC 11: All rows are correct")
+                print("✅ QC 11: All rows are correct\n")
 
             # QC 12: Successful, No Bonus, No Defenders Self Out
             fil_df = df[
@@ -512,9 +512,9 @@ def process_and_qc(df_in):
             qc_wrong_rows = fil_df.loc[cond1 | cond2, 'Event_Number']
             if not qc_wrong_rows.empty:
                 for event in qc_wrong_rows:
-                    print(f"\n⚠️ {event}: 'Attacking_Skill' & 'Defensive & Counter_Action_Skill' - all 3 Present Check once.")
+                    print(f"⚠️ {event}: 'Attacking_Skill' & 'Defensive & Counter_Action_Skill' - all 3 Present Check once.\n")
             else:
-                print("\n✅ QC 12: All rows are correct")
+                print("✅ QC 12: All rows are correct\n")
 
             # QC 13: Outcome = Unsuccessful -> Defensive_Skill must NOT be empty
             qc_violations = df[
@@ -523,9 +523,9 @@ def process_and_qc(df_in):
             ]
             if not qc_violations.empty:
                 for idx, row in qc_violations.iterrows():
-                    print(f"❌ {row['Event_Number']}: Outcome is 'Unsuccessful' and 'Defensive_Skill' is empty.")
+                    print(f"❌ {row['Event_Number']}: Outcome is 'Unsuccessful' and 'Defensive_Skill' is empty.\n")
             else:
-                print("\n✅ Qc 13: All rows are correct")
+                print("✅ Qc 13: All rows are correct\n")
 
             # QC 14: Checking Raid_numbers
             def kabaddi_raid_number_qc_grouped(df):
@@ -562,7 +562,7 @@ def process_and_qc(df_in):
                         if raid_num != expected:
                             print(
                                 f"❌ {event_number}: Outcome is '{outcome}' and 'Raid_Number' is {raid_num}. "
-                                f"Expected 'Raid_Number': {expected}. Please check and update."
+                                f"Expected 'Raid_Number': {expected}. Please check and update.\n"
                             )
                             error_found = True
             
@@ -574,7 +574,7 @@ def process_and_qc(df_in):
             
                 # Final message if no errors found
                 if not error_found:
-                    print("\n✅ QC 14: All rows are correct")
+                    print("✅ QC 14: All rows are correct\n")
 
             kabaddi_raid_number_qc_grouped(df)
 
@@ -754,6 +754,7 @@ else:
             use_container_width=True
         ):
             reset_state()
+
 
 
 
