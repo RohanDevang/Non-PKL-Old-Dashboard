@@ -488,7 +488,7 @@ if uploaded_file:
             fil_df = df[
                 (df['Outcome'] == 'Successful') &
                 (df['Bonus'] == 'No') &
-                (df['No_of_Defenders_Self_Out'] == 0)
+                (df['Number_of_Defenders_Self_Out'] == 0)
             ].copy()
             for col in ['Attacking_Skill', 'Defensive_Skill', 'Counter_Action_Skill']:
                 fil_df[col] = fil_df[col].replace('', pd.NA)
@@ -627,6 +627,7 @@ if uploaded_file:
         except Exception as e:
             sys.stdout = sys.__stdout__
             st.error(f"❌ An error occurred: {e}")
+
 
 
 
