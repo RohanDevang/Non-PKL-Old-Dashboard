@@ -314,8 +314,8 @@ if uploaded_file:
                 "Defenders_Touched_or_Caught", "Raiding_Team_Points_Pre", "Defending_Team_Points_Pre",
                 "Zone_of_Action", "Raider_Name", "Player_ID", "Raider_ID", "Raiding_Team_ID",
                 "Raiding_Team_Name", "Defending_Team_ID", "Defending_Team_Name", "Number_of_Defenders",
-                "Defender_1", "Defender_2", "Defender_3", "Defender_4", "Defender_5", "Defender_6",
-                "Defender_7", "Number_of_Defenders_Self_Out", "Attacking_Skill", "Defensive_Skill",
+                "Defender_1_Name", "Defender_2_Name", "Defender_3_Name", "Defender_4_Name", "Defender_5_Name",
+                "Defender_6_Name", "Defender_7_Name", "Number_of_Defenders_Self_Out", "Attacking_Skill", "Defensive_Skill",
                 "Counter_Action_Skill", "Video_Link", "Video", "Event", "YC_Extra"
             ]
             df = df.reindex(columns=final_cols) # Use reindex to avoid errors if a column is missing
@@ -350,8 +350,8 @@ if uploaded_file:
 
             # QC 2: Outcome Empty consistency
             cols_qc1 = [
-                'Defender_1', 'Defender_2', 'Defender_3', 'Defender_4', 'Defender_5', 'Defender_6', 'Defender_7',
-                'Attacking_Skill', 'Defensive_Skill', 'Counter_Action_Skill', 'Zone_of_Action'
+                'Defender_1_Name', 'Defender_2_Name', 'Defender_3_Name', 'Defender_4_Name', 'Defender_5_Name', 'Defender_6_Name',
+                'Defender_7_Name', 'Attacking_Skill', 'Defensive_Skill', 'Counter_Action_Skill', 'Zone_of_Action'
             ]
             cols_empty_qc1 = df[cols_qc1].replace('', pd.NA).isna().all(axis=1)
             mask_qc1_invalid = (
@@ -371,7 +371,7 @@ if uploaded_file:
                 print("QC 2: ✅ All rows meet QC 1 conditions for Outcome = 'Empty'.\n")
 
             # QC 3: Successful / Unsuccessful with Bonus = No & Raider_Self_Out = 0
-            cols_qc2 = ['Defender_1', 'Number_of_Defenders', 'Zone_of_Action']
+            cols_qc2 = ['Defender_1_Name', 'Number_of_Defenders', 'Zone_of_Action']
             non_empty_outcomes = (
                 df['Outcome'].isin(['Successful', 'Unsuccessful'])
             ) & (df['Bonus'] == 'No') & (df['Raider_Self_Out'] == 0)
@@ -638,6 +638,7 @@ if uploaded_file:
         except Exception as e:
             sys.stdout = sys.__stdout__
             st.error(f"❌ An error occurred: {e}")
+
 
 
 
