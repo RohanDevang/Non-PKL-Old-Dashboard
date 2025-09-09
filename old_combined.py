@@ -225,7 +225,7 @@ if uploaded_file:
             for col in cols:
                 num = int(col.replace('DS', ''))
                 df[col] = df[col].replace(1, num)
-            df['No_of_Defenders_Self_Out'] = df[cols].fillna(0).astype(int).sum(axis=1)
+            df['Number_of_Defenders_Self_Out'] = df[cols].fillna(0).astype(int).sum(axis=1)
             df.drop(columns=cols, inplace=True)
 
             # ---------------- Counter_Action_Skill ----------------
@@ -251,7 +251,7 @@ if uploaded_file:
             df['Season_ID'] = seas_id
             df['Match_No'] = match_no
             df['Match_ID'] = match_id
-            df['Match_Raid_No'] = range(1, n + 1)
+            df['Match_Raid_Number'] = range(1, n + 1)
             
             # ---------------- Raider & Defenders Names ----------------
             parts = df['Player'].str.split(r'\s*\|\s*', expand=True)
@@ -294,7 +294,7 @@ if uploaded_file:
             
             # ---------------- Final Column Order ----------------
             final_cols = [
-                "Season_ID", "Tournament_ID", "Match_No", "Match_ID", "Event_Number", "Match_Raid_No",
+                "Season_ID", "Tournament_ID", "Match_No", "Match_ID", "Event_Number", "Match_Raid_Number",
                 "Team_Raid_Number", "Raid_Number", "Half", "Time", "Raid_Length", "Outcome", "All_Out",
                 "Bonus", "Technical_Point", 'Raider_Self_Out', "Raiding_Touch_Points", "Raiding_Bonus_Points",
                 "Raiding_Self_Out_Points", "Raiding_All_Out_Points", "Raiding_Team_Points",
@@ -304,7 +304,7 @@ if uploaded_file:
                 "Zone_of_Action", "Raider_Name", "Player_ID", "Raider_ID", "Raiding_Team_ID",
                 "Raiding_Team_Name", "Defending_Team_ID", "Defending_Team_Name", "Number_of_Defenders",
                 "Defender_1", "Defender_2", "Defender_3", "Defender_4", "Defender_5", "Defender_6",
-                "Defender_7", "No_of_Defenders_Self_Out", "Attacking_Skill", "Defensive_Skill",
+                "Defender_7", "Number_of_Defenders_Self_Out", "Attacking_Skill", "Defensive_Skill",
                 "Counter_Action_Skill", "Video_Link", "Video", "Event", "YC_Extra"
             ]
             df = df.reindex(columns=final_cols) # Use reindex to avoid errors if a column is missing
@@ -627,6 +627,7 @@ if uploaded_file:
         except Exception as e:
             sys.stdout = sys.__stdout__
             st.error(f"❌ An error occurred: {e}")
+
 
 
 
