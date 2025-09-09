@@ -267,9 +267,9 @@ if uploaded_file:
             
             # Rename columns
             names = parts.iloc[:, :8].rename(columns={
-                0: 'Raider_Name', 1: 'Defender_1', 2: 'Defender_2',
-                3: 'Defender_3', 4: 'Defender_4', 5: 'Defender_5',
-                6: 'Defender_6', 7: 'Defender_7'
+                0: 'Raider_Name', 1: 'Defender_1_Name', 2: 'Defender_2_Name',
+                3: 'Defender_3_Name', 4: 'Defender_4_Name', 5: 'Defender_5_Name',
+                6: 'Defender_6_Name', 7: 'Defender_7_Name'
             })
             
             # Merge back into the dataframe
@@ -638,6 +638,7 @@ if uploaded_file:
         except Exception as e:
             sys.stdout = sys.__stdout__
             st.error(f"❌ An error occurred: {e}")
+
 
 
 
