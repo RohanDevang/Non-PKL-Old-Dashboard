@@ -252,18 +252,29 @@ if uploaded_file:
             df['Match_No'] = match_no
             df['Match_ID'] = match_id
             df['Match_Raid_Number'] = range(1, n + 1)
+
             
             # ---------------- Raider & Defenders Names ----------------
+            # Split the 'Player' column by '|'
             parts = df['Player'].str.split(r'\s*\|\s*', expand=True)
-            names = parts.apply(lambda s: s.str.split('-', n=1, expand=True)[1].str.strip().str.title() if s.str.contains('-', na=False).all() else s)
-            while names.shape[1] < 8:
-                names[names.shape[1]] = None
-            names = names.iloc[:, :8].rename(columns={
+            
+            # Remove jersey numbers for ALL players (handles nulls automatically)
+            parts = parts.apply(lambda col: col.str.split('-', n=1).str[1].str.strip().str.title())
+            
+            # Ensure there are always 8 columns (1 Raider + 7 Defenders)
+            while parts.shape[1] < 8:
+                parts[parts.shape[1]] = None
+            
+            # Rename columns
+            names = parts.iloc[:, :8].rename(columns={
                 0: 'Raider_Name', 1: 'Defender_1', 2: 'Defender_2',
                 3: 'Defender_3', 4: 'Defender_4', 5: 'Defender_5',
                 6: 'Defender_6', 7: 'Defender_7'
             })
+            
+            # Merge back into the dataframe
             df = df.drop(columns='Player').join(names)
+
             
             # ---------------- Start & Stop Time ----------------
             df['Start'] = df['Start'].str.split(',').str[0]
@@ -627,6 +638,7 @@ if uploaded_file:
         except Exception as e:
             sys.stdout = sys.__stdout__
             st.error(f"❌ An error occurred: {e}")
+
 
 
 
