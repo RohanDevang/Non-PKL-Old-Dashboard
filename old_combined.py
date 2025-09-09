@@ -522,10 +522,10 @@ if uploaded_file:
                 Prints custom messages for mismatches or success message if no errors.
 
                 Required columns:
-                ['Match_Raid_No', 'Event_Number', 'Outcome', 'Raiding_Team_Name', 'Raid_Number']
+                ['Match_Raid_Number', 'Event_Number', 'Outcome', 'Raiding_Team_Name', 'Raid_Number']
                 """
-                # Sort by Match_Raid_No to ensure chronological order
-                df = df.sort_values(by='Match_Raid_No').reset_index(drop=True)
+                # Sort by Match_Raid_Number to ensure chronological order
+                df = df.sort_values(by='Match_Raid_Numner').reset_index(drop=True)
 
                 grouped = df.groupby('Raiding_Team_Name')
                 error_found = False  # Flag to check if any errors occur
@@ -627,6 +627,7 @@ if uploaded_file:
         except Exception as e:
             sys.stdout = sys.__stdout__
             st.error(f"❌ An error occurred: {e}")
+
 
 
 
