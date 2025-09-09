@@ -315,9 +315,9 @@ if uploaded_file:
             defender_cols_list = ['Defender_1', 'Defender_2', 'Defender_3', 'Defender_4', 'Defender_5', 'Defender_6', 'Defender_7']
             df['Raiding_Touch_Points'] = 0
             mask = df['Outcome'] == 'Successful'
-            df.loc[mask, 'Raiding_Touch_Points'] = df.loc[mask, defender_cols_list].notna().sum(axis=1) - df.loc[mask, 'No_of_Defenders_Self_Out']
+            df.loc[mask, 'Raiding_Touch_Points'] = df.loc[mask, defender_cols_list].notna().sum(axis=1) - df.loc[mask, 'Number_of_Defenders_Self_Out']
             df["Raiding_All_Out_Points"] = (((df['Outcome'] == 'Successful') & (df["All_Out"] == 1)).astype(int) * 2)
-            df['Raiding_Self_Out_Points'] = df['No_of_Defenders_Self_Out']
+            df['Raiding_Self_Out_Points'] = df['Number_of_Defenders_Self_Out']
             df['Defending_Bonus_Points'] = (((df['Number_of_Defenders'] <= 3) & (df['Outcome'] == 'Unsuccessful')).astype(int))
             df["Raider_Self_Out"] = (df["Defensive_Skill"] == "Raider self out (lobby, time out, empty raid 3)").astype(int)
             df['Defending_Capture_Points'] = (((df['Outcome'] == 'Unsuccessful') & (df['Raider_Self_Out'] == 0)).astype(int))
@@ -627,6 +627,7 @@ if uploaded_file:
         except Exception as e:
             sys.stdout = sys.__stdout__
             st.error(f"❌ An error occurred: {e}")
+
 
 
 
