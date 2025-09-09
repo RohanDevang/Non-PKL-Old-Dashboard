@@ -323,7 +323,7 @@ if uploaded_file:
             # ---------------- Points Calculation ----------------
             df = safe_to_numeric(df, ['All_Out']) # ERROR FIX
             df["Raiding_Bonus_Points"] = (df["Bonus"] == "Yes").astype(int)
-            defender_cols_list = ['Defender_1', 'Defender_2', 'Defender_3', 'Defender_4', 'Defender_5', 'Defender_6', 'Defender_7']
+            defender_cols_list = ['Defender_1_Name', 'Defender_2_Name', 'Defender_3_Name', 'Defender_4_Name', 'Defender_5_Name', 'Defender_6_Name', 'Defender_7_Name']
             df['Raiding_Touch_Points'] = 0
             mask = df['Outcome'] == 'Successful'
             df.loc[mask, 'Raiding_Touch_Points'] = df.loc[mask, defender_cols_list].notna().sum(axis=1) - df.loc[mask, 'Number_of_Defenders_Self_Out']
@@ -638,6 +638,7 @@ if uploaded_file:
         except Exception as e:
             sys.stdout = sys.__stdout__
             st.error(f"❌ An error occurred: {e}")
+
 
 
 
