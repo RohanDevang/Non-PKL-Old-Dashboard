@@ -520,6 +520,45 @@ if uploaded_file:
 
             ######## Quality Check #########
 
+            # QC 0: Sequence Raid (Event) Check.
+
+            def check_event_sequence(df):
+                pattern = re.compile(r"Raid\s+(\d+)")
+                errors_found = False
+
+                # Extract the integer portion or None
+                numbers = []
+                for val in df['Event_Number']:
+                    if isinstance(val, str):
+                        match = pattern.match(val.strip())
+                        numbers.append(int(match.group(1)) if match else None)
+                    else:
+                        numbers.append(None)
+
+                # Sequence checking
+                for i in range(1, len(numbers)):
+                    prev_val = numbers[i - 1]
+                    curr_val = numbers[i]
+                    row = df.iloc[i]
+
+                    # Case 1: Blank or invalid after a valid raid
+                    if prev_val is not None and curr_val is None:
+                        print(f"❌ {row['Event_Number']}: Check RAW CSV and Update.\n")
+                        errors_found = True
+                        continue
+
+                    # Case 2: Numeric sequence mismatch
+                    if prev_val is not None and curr_val is not None:
+                        if curr_val != prev_val + 1:
+                            print(f"❌ {row['Event_Number']}: Check RAW CSV and Update.\n")
+                            errors_found = True
+
+                if not errors_found:
+                    print("QC 0: ✅ All rows are correct.\n")
+
+            check_event_sequence(df)
+
+            
             # QC 1: Empty Columns (Robust Version)
 
             cols_qc1 = [
@@ -1014,3 +1053,4 @@ if uploaded_file:
         except Exception as e:
             sys.stdout = sys.__stdout__
             st.error(f"❌ An error occurred: {e}")
+
